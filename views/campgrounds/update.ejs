@@ -1,0 +1,95 @@
+<% layout("layouts/boilerplate") %>
+    <div class="row">
+  <h1 class="text-center">Update Campground</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds/<%= campground._id %>?_method=PATCH" method="POST" novalidate class="validated-form">
+
+      <div class="mb-4">
+        <label for="title" class="form-label"> Title </label>
+        <input
+          value="<%= campground.title %>"
+          class="form-control"
+          type="text"
+          placeholder="Enter Campground Title"
+          name="campground[title]"
+          id="title"
+          required
+        />
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label for="price" class="form-label">Price</label>
+        <input
+          value="<%= campground.price %>"
+          class="form-control"
+          type="number"
+          name="campground[price]"
+          id="price"
+          placeholder="Enter the price"
+          required
+        />
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+      
+      <div class="mb-4">
+        <label for="image" class="form-label">Image Url</label>
+        <input
+          value="<%= campground.image %>"
+          class="form-control"
+          type="text"
+          name="campground[image]"
+          id="image"
+          placeholder="Put an image"
+          required
+        />
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+      </div>
+
+      <div class="form-floating mb-4">
+        
+        <textarea
+          class="form-control"
+          id="floatingTextarea2" 
+          style="height: 100px"
+          name="campground[description]"
+          placeholder="enter description"
+          required
+        >
+            <%= campground.description %>
+        </textarea>
+        <div class="valid-feedback">
+          Looks good!
+        </div>
+        <label for="floatingTextarea2" class="form-label">description</label>
+      </div>
+
+      <div class="mb-4">
+
+        <label for="location" class="form-label">Location</label>
+
+        <select name="campground[location]" id="location" class="form-select">
+           <% for(let i=0; i < 15; i++) { %>
+                    <% let location=`${cities[i].city}, ${cities[i].state}` %>
+                        <option value="<%= location %>" <%= location === campground.location ? 'selected' : "" %> >
+                            <%= location %>
+                        </option>
+            <% } %>
+        </select>
+        
+      </div>
+
+      <div class="mb-4">
+        <input type="submit" class="btn btn-info" value="Update Campground" />
+      </div>
+
+    </form>
+    <a href="/campgrounds/<%= campground._id %>" class="btn btn-dark">Back to Campground</a>
+  </div>
+</div>
