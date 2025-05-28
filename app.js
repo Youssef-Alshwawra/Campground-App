@@ -7,7 +7,7 @@ const ExpressError = require('./Utils/ExpressError');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-const campgroundRoutes = require('./Routes/Campground');
+const courseRoutes = require('./Routes/Courses');
 const reviewRoutes = require('./Routes/Reviews');
 const userRoutes = require('./Routes/Users');
 
@@ -15,7 +15,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const User = require('./Models/user');
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+mongoose.connect('mongodb://127.0.0.1:27017/EduPilot_dev1');
 
 const db = mongoose.connection;
 
@@ -65,12 +65,12 @@ app.use( (req, res, next) => {
 });
 
 
-app.use('/campgrounds', campgroundRoutes);
-app.use('/campgrounds/:id/reviews', reviewRoutes);
+app.use('/courses', courseRoutes);
+app.use('/courses/:id/reviews', reviewRoutes);
 app.use('/', userRoutes);
 
 app.get('/', (req, res) => {
-    res.redirect('/campgrounds');
+    res.redirect('/courses');
 });
 
 app.all('*', (req, res, next) => {

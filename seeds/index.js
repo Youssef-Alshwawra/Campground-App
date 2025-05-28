@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const Campground = require('../Models/Campground');
+const Course = require('../Models/Course');
 const cities = require('./cities');
 const { places, descriptors } = require('./seedHelpers');
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp');
+mongoose.connect('mongodb://127.0.0.1:27017/EduPilot');
 
 const db = mongoose.connection;
 
@@ -15,11 +15,11 @@ db.once("open", () => {
 const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDb = async () => {
-    await Campground.deleteMany({});
+    await Course.deleteMany({});
     for(let i = 0; i < 10; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 20) + 10;
-        const camp = new Campground({
+        const course = new Course({
             author: '6720e5b9d7df5f682cf29952',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title:`${sample(descriptors)} ${sample(places)}`,
@@ -27,7 +27,7 @@ const seedDb = async () => {
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores pariatur dolore nemo vel, fuga assumenda sed in voluptas consequatur deserunt error laboriosam iure similique magnam nulla, amet cupiditate exercitationem quo!',
             price
             });
-        await camp.save()
+        await course.save()
     }
 }   
 

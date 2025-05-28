@@ -1,35 +1,59 @@
 <% layout("layouts/boilerplate") %>
-<h1> Login </h1>
-<form action="/login" method="POST" class="validated-form" novalidate>
-     <div class="mb-4">
-        <label for="username" class="form-label"> Username </label>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="Enter your username"
-          name="username"
-          id="username"
-          required
-        />
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
-      
-      <div class="mb-4">
-        <label for="password" class="form-label"> Password </label>
-        <input
-          class="form-control"
-          type="password"
-          placeholder="Enter your password"
-          name="password"
-          id="password"
-          required
-        />
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
+<h1 class="mb-4">Login</h1>
+<form action="/login" method="POST"  class="needs-validation" novalidate>
+  <!-- Username: required, at least 3 letters -->
+  <div class="mb-4">
+    <label for="username" class="form-label">Username</label>
+    <input
+      type="text"
+      class="form-control"
+      id="username"
+      name="username"
+      placeholder="Enter your username"
+      required
+      minlength="3"
+      pattern="[A-Za-z0-9_]+"
+    />
+    <div class="invalid-feedback">
+      Username must be at least 3 characters (letters, numbers, or underscore).
+    </div>
+  </div>
+  
+  <!-- Password: required, at least 8 characters -->
+  <div class="mb-4">
+    <label for="password" class="form-label">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="password"
+      name="password"
+      placeholder="Enter your password"
+      required
+      minlength="8"
+    />
+    <div class="invalid-feedback">
+      Password must be at least 8 characters long.
+    </div>
+  </div>
 
-      <button class="btn btn-success">Login</button>
+  <button type="submit" class="btn btn-success">Login</button>
 </form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    'use strict';
+    // Select all forms with .needs-validation
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        // If the form is invalid, stop submission
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        // Apply Bootstrap validation styles
+        form.classList.add('was-validated');
+      }, false);
+    });
+  });
+</script>

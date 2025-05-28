@@ -1,50 +1,99 @@
 <% layout("layouts/boilerplate") %>
 <h1> Register </h1>
-<form action="/register" method="POST" class="validated-form" novalidate>
-     <div class="mb-4">
-        <label for="username" class="form-label"> Username </label>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="Enter your username"
-          name="username"
-          id="username"
-          required
-        />
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
-      
-      <div class="mb-4">
-        <label for="email" class="form-label"> Email </label>
-        <input
-          class="form-control"
-          type="email"
-          placeholder="Enter your email"
-          name="email"
-          id="email"
-          required
-        />
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
-      
-      <div class="mb-4">
-        <label for="password" class="form-label"> Password </label>
-        <input
-          class="form-control"
-          type="password"
-          placeholder="Enter your password"
-          name="password"
-          id="password"
-          required
-        />
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
+<form id="registerForm" class="needs-validation" novalidate  action="/register" method="POST" >
+  <!-- Username -->
+  <div class="mb-3">
+    <label for="username" class="form-label">Username</label>
+    <input 
+      type="text" 
+      class="form-control" 
+      id="username" 
+      name="username" 
+      required 
+      minlength="3" 
+      pattern="[A-Za-z0-9_]+"
+    />
+    <div class="invalid-feedback">
+      Username must be 3–∞ characters, letters/numbers/underscores only.
+    </div>
+  </div>
 
-      <button class="btn btn-success">Register</button>
+  <!-- Email (Gmail only) -->
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input 
+      type="email" 
+      class="form-control" 
+      id="email" 
+      name="email"
+      required
+      pattern="[a-zA-Z0-9._%+-]+@gmail\.com"
+    />
+    <div class="invalid-feedback">
+      Please enter a valid Gmail address (e.g. you@gmail.com).
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input 
+      type="password" 
+      class="form-control" 
+      id="password" 
+      name="password"
+      required
+      minlength="8"
+      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+"
+    />
+    <div class="invalid-feedback">
+      Password must be ≥8 characters, include uppercase, lowercase, number & special character.
+    </div>
+  </div>
+
+  <!-- Confirm Password -->
+  <div class="mb-3">
+    <label for="confirmPassword" class="form-label">Confirm Password</label>
+    <input 
+      type="password" 
+      class="form-control" 
+      id="confirmPassword" 
+      name="confirmPassword"
+      required
+    />
+    <div class="invalid-feedback" id="confirmFeedback">
+      Passwords do not match.
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Register</button>
 </form>
+
+<script>
+  (function() {
+    'use strict';
+    const form = document.getElementById('registerForm');
+    const password = document.getElementById('password');
+    const confirm  = document.getElementById('confirmPassword');
+    const confirmFeedback = document.getElementById('confirmFeedback');
+
+    form.addEventListener('submit', event => {
+      // First run built-in HTML5 checks:
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+
+      // Then custom: passwords match?
+      if (password.value !== confirm.value) {
+        confirm.classList.add('is-invalid');
+        event.preventDefault();
+        event.stopPropagation();
+      } else {
+        confirm.classList.remove('is-invalid');
+      }
+
+      form.classList.add('was-validated');
+    }, false);
+  })();
+</script>

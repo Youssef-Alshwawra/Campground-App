@@ -1,0 +1,33 @@
+<% layout("layouts/boilerplate") %>
+<h1>All courses</h1>
+<div class="bg-emerald-500 w-full h-6">
+    <a href="/courses/new" class="my-5 btn fs-4 px-4 py-2" style="background-color: #024068; color: white;"> Create New course</a>
+</div>
+<ul>
+    <% for(let course of courses) { %>
+        <div class="card mb-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" alt="" src="<%= course.image %>">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"> <%= course.title %> </h5>
+                        <p class="card-text"> <%= course.description %> </p>
+                        <p class="card-text"> 
+                            <small class="text-body-secondary">
+                                <%= course.location %>
+                            </small>     
+                        </p>
+                        <p class="card-text"> 
+                            <small class="text-body-secondary">
+                               Course duration: <%= course.duration %>h
+                            </small>     
+                        </p>
+                        <a href="/courses/<%= course._id %>" class="btn" style="background-color: #024068; color: white;"> View <%= course.title %></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+</ul>

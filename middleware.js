@@ -1,6 +1,8 @@
-const Campground = require('./Models/Campground');
+const Course = require('./Models/Course');
 const Review = require('./Models/Review');
-const { campgroundSchema, reviewSchema } = require('./SchemasValidation');
+const multer = require('multer');
+const path = require('path');
+const { courseSchema, reviewSchema } = require('./SchemasValidation');
 const ExpressError = require('./Utils/ExpressError');
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -20,8 +22,8 @@ module.exports.storeReturnTo = (req, res, next) => {
     next();
 }
 
-module.exports.validateCampground = (req, res, next) => {           
-    const { error } = campgroundSchema.validate(req.body);
+module.exports.validateCourse = (req, res, next) => {           
+    const { error } = courseSchema.validate(req.body.course);
         if(error) { 
             const msg = error.details.map(el => el.message).join(', ');
             throw new ExpressError(msg, 400);
@@ -32,10 +34,10 @@ module.exports.validateCampground = (req, res, next) => {
 
 module.exports.isAuthor = async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
-    if( !campground.author.equals(req.user._id) ) {
+    const course = await Course.findById(id);
+    if (!course.author.equals(req.user._id) ) {
         req.flash('error', 'you do not have permission to do that!');
-        return res.redirect(`/campgrounds/${id}`);
+        return res.redirect(`/courses/${id}`);
     } 
     next();
 };
@@ -45,7 +47,7 @@ module.exports.isReviewAuthor = async (req, res, next) => {
     const review = await Review.findById(reviewId);
     if( !review.author.equals(req.user._id) ) {
         req.flash('error', 'you do not have permission to do that!');
-        return res.redirect(`/campgrounds/${id}`);
+        return res.redirect(`/courses/${id}`);
     } 
     next();
 };
@@ -60,3 +62,35 @@ module.exports.validateReview = (req, res, next) => {
     }
 };
 
+// Store in public/uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        // __dirname is e.g. D:/…/EduPilot
+        cb(null, path.join(__dirname, 'public', 'uploads'));
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, Date.now() + ext);
+    }
+});
+
+// Optional: only accept images
+const fileFilter = (req, file, cb) => {
+    const allowed = /jpeg|jpg|png|gif/;
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (allowed.test(ext)) cb(null, true);
+    else cb(new Error('Only images are allowed'), false);
+};
+
+module.exports.upload = multer({ storage, fileFilter });
+
+module.exports.unpackCourse = (req, res, next) => {
+    if (!req.body) return next();
+    const course = {};
+    for (let key in req.body) {
+        const m = key.match(/^course\[(.+)\]$/);
+        if (m) course[m[1]] = req.body[key];
+    }
+    req.body.course = course;
+    next();
+  };
